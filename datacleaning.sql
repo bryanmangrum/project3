@@ -10,7 +10,7 @@ DROP TABLE Player_Bios;
 DROP TABLE Team_History;
 DROP TABLE Player;
 
--- Limit NBA games to the 2000-01 season onwards
+-- Limit NBA games to the 2020-21 season
 
 -- 2020-21 season started on December 22, 2020
 DELETE FROM Game
@@ -67,7 +67,7 @@ GROUP BY Team;
 
 -- After importing web scraped CSV of player salaries from ESPN...
 
--- Find potential duplicate player names in our player salaries in our draft table
+-- Find potential duplicate player names in our player salaries in Draft
 SELECT NAME
 FROM player_salaries
 WHERE NAME IN (
