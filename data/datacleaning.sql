@@ -1,4 +1,4 @@
--- All commands used for data cleaning
+-- All commands used for data cleaning in the SQLITE file
 
 -- Drop tables that won't be used
 DROP TABLE News;
@@ -86,3 +86,60 @@ SELECT player_salaries.RANK AS Rank,
     player_salaries.SALARY AS Salary
 FROM player_salaries
 LEFT JOIN Draft ON Draft.namePlayer=player_salaries.NAME;
+
+-- Export desired tables to CSV
+
+
+-- Create tables in postgresql to import CSV tables
+
+CREATE TABLE draft (
+    yearDraft REAL NOT NULL,
+    numberPickOverall INT NOT NULL,
+    numberRound INT NOT NULL,
+    numberRoundPick INT NOT NULL,
+    namePlayer VARCHAR(255) NOT NULL,
+    slugTeam VARCHAR(255) NOT NULL,
+    nameOrganizationFrom VARCHAR(255),
+    typeOrganizationFrom VARCHAR(255),
+    idPlayer REAL NOT NULL Primary Key,
+    idTeam REAL,
+    nameTeam VARCHAR(255) NOT NULL,
+    cityTeam VARCHAR(255) NOT NULL,
+    teamName VARCHAR(255) NOT NULL,
+    PLAYER_PROFILE_FLAG INT,
+    slugOrganizationTypeFrom VARCHAR(255), 
+    locationOrganizationFrom VARCHAR(255)
+);
+
+CREATE TABLE Team_Attributes (
+    ID INT NOT NULL PRIMARY KEY,
+    ABBREVIATION VARCHAR(5)NOT NULL,
+    NICKNAME VARCHAR(255)NOT NULL,
+    YEARFOUNDED REAL NOT NULL,
+    CITY VARCHAR(255) NOT NULL,
+    ARENA VARCHAR(255)NOT NULL,
+    ARENACAPACITY REAL,
+    OWNER VARCHAR(255)NOT NULL,
+    GENERALMANAGER VARCHAR(255)NOT NULL,
+    HEADCOACH VARCHAR(255)NOT NULL,
+    DLEAGUEAFFILIATION VARCHAR(255)NOT NULL,
+    FACEBOOK_WEBSITE_LINK VARCHAR(255)NOT NULL,
+    INSTAGRAM_WEBSITE_LINK VARCHAR(255)NOT NULL,
+    TWITTER_WEBSITE_LINK VARCHAR(255)NOT NULL
+);
+
+CREATE TABLE Win_Counts (
+    Team VARCHAR(255) NOT NULL PRIMARY KEY,
+    Division VARCHAR(255) NOT NULL,
+    Conference VARCHAR(255) NOT NULL,
+    Win_Count INT NOT NULL
+);
+
+CREATE TABLE Player_2020_Salaries (
+    Rank INT NOT NULL PRIMARY KEY,
+    idPlayer REAL,
+    Team VARCHAR(255) NOT NULL,
+    Player VARCHAR(255) NOT Null,
+    Salary REAL NOT NULL,
+    FOREIGN KEY(idPlayer) REFERENCES Draft(idPlayer)
+);
