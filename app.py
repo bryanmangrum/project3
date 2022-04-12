@@ -17,6 +17,7 @@ Player_Salaries = Base.classes.player_2020_salaries
 Win_Counts = Base.classes.win_counts
 Team_Attributes = Base.classes.team_attributes
 Draft = Base.classes.draft
+Arenas = Base.classes.arenas
 
 # Initialize app
 app = Flask(__name__)
