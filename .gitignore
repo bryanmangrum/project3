@@ -6,3 +6,6 @@ __pycache__/
 
 # Pip Virtual Environment
 venv/
+
+# .DS_Store
+.DS_Store

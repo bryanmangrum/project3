@@ -144,7 +144,7 @@ CREATE TABLE Player_2020_Salaries (
     FOREIGN KEY(idPlayer) REFERENCES Draft(idPlayer)
 );
 
---Create Table for area info
+--Create Table for arena info
 CREATE TABLE arenas(
     arena_PK VARCHAR(255) PRIMARY KEY NOT NULL,
     latitude REAL NOT NULL,
