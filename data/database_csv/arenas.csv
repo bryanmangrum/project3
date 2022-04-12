@@ -1,0 +1,31 @@
+﻿arena_PK,latitude,longitude,arena,team,sector,subSector
+State Farm Arena-Atlanta Hawks,33.75745856,-84.3962493,State Farm Arena,Atlanta Hawks,Insurance ,"Home, Auto, & Life"
+TD Garden-Boston Celtics,42.36637237,-71.06211381,TD Garden,Boston Celtics,Finance,Banking
+Barclays Center-Brooklyn Nets,40.6828126,-73.9754128,Barclays Center,Brooklyn Nets,Finance,Banking
+Spectrum Center-Charlotte Hornets,35.22535346,-80.83938037,Spectrum Center,Charlotte Hornets,Telecommunications,
+United Center-Chicago Bulls,41.88081859,-87.67416517,United Center,Chicago Bulls,Transportation ,Airline
+Rocket Mortgage FieldHouse-Cleveland Cavaliers,41.49667595,-81.68810032,Rocket Mortgage FieldHouse,Cleveland Cavaliers,Technology,Finance
+American Airlines Center-Dallas Mavericks,32.79053505,-96.81027616,American Airlines Center,Dallas Mavericks,Transportation ,Airline
+Ball Arena-Denver Nuggets,39.74881321,-105.0075813,Ball Arena,Denver Nuggets,Manufacturing,Packaging
+Little Caesars Arena-Detroit Pistons,42.34130876,-83.05525657,Little Caesars Arena,Detroit Pistons,Retail,Food
+Chase Center-Golden State Warriors,37.76812291,-122.3877043,Chase Center,Golden State Warriors,Finance,Banking
+Toyota Center-Houston Rockets,29.75096531,-95.36215415,Toyota Center,Houston Rockets,Manufacturing,Automotive
+Gainbridge Fieldhouse-Indiana Pacers,39.76422482,-86.15549379,Gainbridge Fieldhouse,Indiana Pacers,Finance,Annuities
+Crypto.com Arena-Los Angeles Clippers,34.04318639,-118.2671897,Crypto.com Arena,Los Angeles Clippers,Technology,Cryptocurrency
+Crypto.com Arena-Los Angeles Lakers,34.04318639,-118.2671897,Crypto.com Arena,Los Angeles Lakers,Technology,Cryptocurrency
+FedExForum-Memphis Grizzlies,35.13829093,-90.0505864,FedExForum,Memphis Grizzlies,Logistics,
+FTX Arena-Miami Heat,25.78161392,-80.18697973,FTX Arena,Miami Heat,Technology,Cryptocurrency
+Fiserv Forum-Milwaukee Bucks,43.04521347,-87.91736474,Fiserv Forum,Milwaukee Bucks,Technology,Finance
+Target Center-Minnesota Timberwolves,44.97963024,-93.2760196,Target Center,Minnesota Timberwolves,Retail,Big Box
+Smoothie King Center-New Orleans Pelicans,29.9492303,-90.0820568,Smoothie King Center,New Orleans Pelicans,Retail,Food
+Madison Square Garden-New York Knicks,40.75067516,-73.99347089,Madison Square Garden,New York Knicks,Entertainment,
+Paycom Center-Oklahoma City Thunder,35.46365188,-97.51513526,Paycom Center,Oklahoma City Thunder,Technology,Software
+Amway Center-Orlando Magic,28.53942874,-81.38388569,Amway Center,Orlando Magic,Retail,Multi-Level Marketing
+Wells Fargo Center-Philadelphia 76ers,39.90132494,-75.17200096,Wells Fargo Center,Philadelphia 76ers,Finance,Banking
+Footprint Center-Phoenix Suns,33.44593393,-112.0712218,Footprint Center,Phoenix Suns,Science,Materials
+Moda Center-Portland Trail Blazers,45.53170036,-122.6668959,Moda Center,Portland Trail Blazers,Insurance ,Health
+Golden 1 Center-Sacramento Kings,38.58037222,-121.4996709,Golden 1 Center,Sacramento Kings,Finance,Banking
+AT&T Center-San Antonio Spurs,29.42718829,-98.43744374,AT&T Center,San Antonio Spurs,Telecommunications,
+Scotiabank Arena-Toronto Raptors,43.64363688,-79.37912036,Scotiabank Arena,Toronto Raptors,Finance,Banking
+Vivint Arena-Utah Jazz,40.76838996,-111.9010445,Vivint Arena,Utah Jazz,Technology,Home Security
+Capital One Arena-Washington Wizards,38.89833448,-77.02083534,Capital One Arena,Washington Wizards,Finance,Banking
