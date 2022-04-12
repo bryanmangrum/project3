@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Lux Bootswatch Theme-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename= 'img/favicon.png') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!--Navbar Brand-->
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/basketball-32.png') }}" alt="Basketball Brand">
+                <span class="align-middle">NBA Stats</span>
+            </a>
+            <!--Menu toggler when window size is small-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+                    aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Navbar items-->
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav me-auto">
+                    <!--Index-->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if active_page == 'index' }}" href="{{ url_for('index') }}">Home
+                            {% if active_page == 'index' %}<span class="visually-hidden">(current)</span>{% endif %}
+                        </a>
+                    </li>
+                    <!--Navbar item 2-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <!--Navbar item 3-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <!--Navbar item 4-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <!--Navbar item 5/Dropdown example-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--Main content-->
+    <div class="container-fluid mt-3">
+        {% block content %}{% endblock %}
+    </div>
+    <!--chart.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+        integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--Bootstrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <!--JS file for plots-->
+    <script src="{{ url_for('static', filename='js/logic.js') }}"></script>
+</body>
+</html>

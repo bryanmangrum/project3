@@ -1,12 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+
+{# Set active class tag for navigation bar #}
+{% set active_page = 'index' %}
+
+{# Set page title #}
+{% block title %}NBA Stats{% endblock %}
+
+{# Web content code goes here #}
+{% block content %}
+    <div class="row">
+        <div class="col-4">
+            <div class="card border-secondary">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                    <h4 class="card-title">Secondary card title</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                        content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card border-secondary">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                    <h4 class="card-title">Secondary card title</h4>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
