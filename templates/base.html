@@ -32,9 +32,10 @@
                             {% if active_page == 'index' %}<span class="visually-hidden">(current)</span>{% endif %}
                         </a>
                     </li>
-                    <!--Navbar item 2-->
+                    <!--Salaries-->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link {{ 'active' if active_page == 'salaries' }}" href="{{ url_for('salaries') }}">Salaries</a>
+                        {% if active_page == 'salaries' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
                     <!--Navbar item 3-->
                     <li class="nav-item">

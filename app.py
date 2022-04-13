@@ -30,7 +30,7 @@ def index():
 
 
 @app.route("/salaries")
-def test():
+def salaries():
     # Initialize database session
     session = Session(engine)
 
