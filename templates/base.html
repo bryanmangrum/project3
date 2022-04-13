@@ -6,6 +6,7 @@
     <!--Lux Bootswatch Theme-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename= 'img/favicon.png') }}">
+    <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -71,7 +72,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <!--JS file for plots-->
-    <script src="{{ url_for('static', filename='js/logic.js') }}"></script>
+    <!--Custom JS that loads through Flask-->
+    <script>
+        {% block script %}{% endblock %}
+    </script>
 </body>
 </html>
