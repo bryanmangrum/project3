@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{# Set active class tag for navigation bar #}
+{% set active_page = 'wins' %}
+
+{# Set page title #}
+{% block title %}Test1{% endblock %}
+
+{# Web content code goes here #}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div id="treemap"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    let label = {{ label|safe }};
+    let parent = {{ parent|safe }};
+
+    let data = [{
+
+      type: "treemap",
+
+      labels: label,
+
+      parents: parent
+
+    }];
+
+    let config = {responsive: true};
+
+    Plotly.newPlot('treemap', data, config);
+{% endblock %}

@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 # Initial connection to database
-engine = create_engine("postgresql://postgres:password@localhost:5432"
-                       "/basketball")
+engine = create_engine("postgresql://postgres:postgres@localhost:5432"
+                       "/postgres")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 
@@ -68,10 +68,47 @@ def salaries():
             # append parent team into parents
             parents.append(player[1])
 
-    # Close connection
+        # Close connection
     session.close()
 
     return render_template("salaries.html", labels=labels, parents=parents)
+
+@app.route("/wins")
+def wins():
+    # Initialize database session
+    session1 = Session(engine)
+
+    #For Team Win_Counts
+    # Base labels and parents
+    label = ["League", "Western Conference", "Eastern Conference"]
+    parent = ["", "League", "League"]
+
+    # Query for distinct divisions and their parent conferences
+    results = session1.query(Win_Counts.division, Win_Counts.conference)\
+        .distinct()
+
+    for row in results:
+        # append distinct divisions to labels
+        label.append(row[0])
+        # append their parent conferences to parents
+        parent.append(row[1])
+
+    # Query distinct teams
+    team_results = session1.query(Win_Counts.team, Win_Counts.division)\
+        .distinct()
+
+    for row in team_results:
+        # append distinct teams to labels
+        label.append(row[0])
+        # append their parent divisions to parents
+        parent.append(row[1])
+
+
+
+    # Close connection
+    session1.close()
+
+    return render_template("wins.html", label=label, parent=parent)
 
 
 if __name__ == "__main__":

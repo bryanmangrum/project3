@@ -37,9 +37,10 @@
                         <a class="nav-link {{ 'active' if active_page == 'salaries' }}" href="{{ url_for('salaries') }}">Salaries</a>
                         {% if active_page == 'salaries' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
-                    <!--Navbar item 3-->
+                    <!--Wins-->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link {{ 'active' if active_page == 'wins' }}" href="{{ url_for('wins') }}">Wins</a>
+                        {% if active_page == 'wins' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
                     <!--Navbar item 4-->
                     <li class="nav-item">
