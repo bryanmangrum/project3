@@ -17,15 +17,14 @@
 {% block script %}
     let labels = {{ labels|safe }};
     let parents = {{ parents|safe }};
+    let values = {{ values|safe }};
 
     let data = [{
-
-      type: "treemap",
-
-      labels: labels,
-
-      parents: parents
-
+        type: "treemap",
+        labels: labels,
+        parents: parents,
+        values: values,
+        branchvalues: "total"
     }];
 
     let config = {responsive: true};
