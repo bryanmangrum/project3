@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 # Initial connection to database
-engine = create_engine("postgresql://postgres:postgres@localhost:5432"
-                       "/postgres")
+engine = create_engine("postgresql://postgres:password@localhost:5432"
+                       "/basketball")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 
@@ -37,7 +37,20 @@ def salaries():
     # Base labels and parents
     labels = ["League", "Western Conference", "Eastern Conference"]
     parents = ["", "League", "League"]
-    #values = []
+    values = []
+
+    # Query for league salary total (add up all players' salaries)
+    results = session.query(func.sum(Player_Salaries.salary))
+    values.append(results[0][0])
+
+    # Query for conference salary total
+    for conference in labels[1:]:
+        conference_total = session.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.conference)\
+            .having(Win_Counts.conference == conference)
+        for total in conference_total:
+            values.append(total[0])
 
     # Query for distinct divisions and their parent conferences
     results = session.query(Win_Counts.division, Win_Counts.conference)\
@@ -48,6 +61,12 @@ def salaries():
         labels.append(row[0])
         # append their parent conferences to parents
         parents.append(row[1])
+        # find salary totals for division
+        division_total = session.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.division)\
+            .having(Win_Counts.division == row[0])
+        values.append(division_total[0][0])
 
     # Query distinct teams
     team_results = session.query(Win_Counts.team, Win_Counts.division)\
@@ -58,21 +77,35 @@ def salaries():
         labels.append(row[0])
         # append their parent divisions to parents
         parents.append(row[1])
+        # find salary totals for team
+        team_total = session.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.team)\
+            .having(Win_Counts.team == row[0])
+        values.append(team_total[0][0])
         # new query using current row's team name
         player_results = session.query(
             Player_Salaries.player,
-            Player_Salaries.team
-        ).filter(Player_Salaries.team == row[0]).order_by(Player_Salaries.team.desc())
+            Player_Salaries.team,
+            Player_Salaries.salary
+        ).filter(Player_Salaries.team == row[0])
         for player in player_results:
             # append distinct players into labels
             labels.append(player[0])
             # append parent team into parents
             parents.append(player[1])
+            # append salary into values
+            values.append(player[2])
 
-        # Close connection
+    # Close connection
     session.close()
 
-    return render_template("salaries.html", labels=labels, parents=parents)
+    return render_template(
+        "salaries.html",
+        labels=labels,
+        parents=parents,
+        values=values
+    )
 
 @app.route("/wins")
 def wins():

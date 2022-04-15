@@ -140,7 +140,7 @@ CREATE TABLE Player_2020_Salaries (
     idPlayer REAL,
     Team VARCHAR(255) NOT NULL,
     Player VARCHAR(255) NOT Null,
-    Salary REAL NOT NULL,
+    Salary INTEGER NOT NULL,
     FOREIGN KEY(idPlayer) REFERENCES Draft(idPlayer)
 );
 
