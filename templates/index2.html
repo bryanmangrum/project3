@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{# Set active class tag for navigation bar #}
+{% set active_page = 'index' %}
+
+{# Set page title #}
+{% block title %}NBA Stats{% endblock %}
+
+{# Web content code goes here #}
+{% block content %}
+    <div class="row">
+        <div class="col-4">
+            
+        </div>
+    </div>
+
+    <div id="map"></div>
+{% endblock %}
+{% block script %}
+    
+let arenaInfo =  {{ arenaInfo|safe }}; 
+let arenaMarker = [];
+ 
+
+for (var i=0; i < arenaInfo.length; i++) {
+    console.log(arenaMarker)
+    arenaMarker.push(
+  L.marker(arenaInfo[i].location).bindPopup("<h1>"+arenaInfo[i].arenaName+"</h1>")
+    );
+};
+ 
+  // Create a map object.
+  let myMap = L.map("map", {
+     center: [37.09, -95.71],
+     zoom: 5
+   });
+ 
+ 
+   // Add a tile layer.
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+   }).addTo(myMap);
+   
+{% endblock %}

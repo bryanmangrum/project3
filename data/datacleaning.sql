@@ -152,5 +152,7 @@ CREATE TABLE arenas(
     arena VARCHAR(255) NOT NULL,
     team VARCHAR (255) NOT NULL,
     sector VARCHAR(255) NOT NULL,
-    subSector VARCHAR(255)
+    subSector VARCHAR(255),
+	arenaURL VARCHAR(255) NOT NULL,
+	sponsorURL VARCHAR(255) NOT NULL
 );

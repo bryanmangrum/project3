@@ -1,11 +1,13 @@
+from re import A
+from unittest import result
 from flask import Flask, render_template
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+import config
 
 # Initial connection to database
-engine = create_engine("postgresql://postgres:password@localhost:5432"
-                       "/basketball")
+engine = create_engine(f"postgresql://postgres:{config.pw}@localhost:5432/{config.db}")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 
@@ -23,10 +25,31 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     session = Session(engine)
-    results = session.query(Team_Attributes.arena).all()
+    #results = session.query(Team_Attributes.arena).all()
+    arenaInfo = []
+    result = session.query(Arenas.latitude, Arenas.longitude, Arenas.arena, Arenas.team, Arenas.arenaurl ,Arenas.sponsorurl)
+    for row in result:
+        latlon = []
+        latlon.append(row[0])
+        latlon.append(row[1])
+        arena_dict = {
+            "location": latlon,
+            "arenaName": row[2],
+            "teamName": row[3],
+            "arenaURL": row[4],
+            "sponsorURL": row[5]
+        }
+        arenaInfo.append(arena_dict)
+
+    
+
+    print(arenaInfo)
+    
+
+
     session.close()
 
-    return render_template("index.html")
+    return render_template("index.html", arenaInfo = arenaInfo)
 
 
 @app.route("/salaries")
