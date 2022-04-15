@@ -1,11 +1,76 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
-{# Set active class tag for navigation bar #}
-{% set active_page = 'index' %}
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin="" />
 
-{# Set page title #}
-{% block title %}NBA Stats{% endblock %}
-
+  <!-- Leaflet JavaScript code -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+  crossorigin=""></script>
+    <title>test</title>
+  <link rel="stylesheet" type-"text/css" href="static/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Lux Bootswatch Theme-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename= 'img/favicon.png') }}">
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+          <!--Navbar Brand-->
+          <a class="navbar-brand" href="{{ url_for('index') }}">
+              <img src="{{ url_for('static', filename='img/basketball-32.png') }}" alt="Basketball Brand">
+              <span class="align-middle">NBA Stats</span>
+          </a>
+          <!--Menu toggler when window size is small-->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+                  aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <!--Navbar items-->
+          <div class="collapse navbar-collapse" id="navbarColor03">
+              <ul class="navbar-nav me-auto">
+                  <!--Index-->
+                  <li class="nav-item">
+                      <a class="nav-link {{ 'active' if active_page == 'index' }}" href="{{ url_for('index') }}">Home
+                          {% if active_page == 'index' %}<span class="visually-hidden">(current)</span>{% endif %}
+                      </a>
+                  </li>
+                  <!--Salaries-->
+                  <li class="nav-item">
+                      <a class="nav-link {{ 'active' if active_page == 'salaries' }}" href="{{ url_for('salaries') }}">Salaries</a>
+                      {% if active_page == 'salaries' %}<span class="visually-hidden">(current)</span>{% endif %}
+                  </li>
+                  <!--Navbar item 3-->
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <!--Navbar item 4-->
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">About</a>
+                  </li>
+                  <!--Navbar item 5/Dropdown example-->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                         aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                      <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
 {# Web content code goes here #}
 {% block content %}
     <div class="row">
