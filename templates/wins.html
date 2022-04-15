@@ -17,15 +17,17 @@
 {% block script %}
     let label = {{ label|safe }};
     let parent = {{ parent|safe }};
+    let value = {{ value|safe }};
 
-    let data = [{
-
-      type: "treemap",
-
-      labels: label,
-
-      parents: parent
-
+    var data = [{
+        type: "treemap",
+        branchvalues: "total",
+        labels: label,
+        parents: parent,
+        values:  value,
+        outsidetextfont: {"size": 20, "color": "#377eb8"},
+        marker: {"line": {"width": 2}},
+        pathbar: {"visible": false}
     }];
 
     let config = {responsive: true};
