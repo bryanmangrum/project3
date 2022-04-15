@@ -4,12 +4,15 @@
 {% set active_page = 'salaries' %}
 
 {# Set page title #}
-{% block title %}Test{% endblock %}
+{% block title %}Salaries{% endblock %}
 
 {# Web content code goes here #}
 {% block content %}
     <div class="row">
-        <div class="col-12">
+        <div class="col-4">
+
+        </div>
+        <div class="col-8">
             <div id="treemap"></div>
         </div>
     </div>
@@ -20,14 +23,27 @@
     let values = {{ values|safe }};
 
     let data = [{
-        type: "treemap",
+        type: "sunburst",
         labels: labels,
         parents: parents,
         values: values,
-        branchvalues: "total"
+        branchvalues: "total",
+        maxdepth: 4,
+        marker: {
+            colors: []
+        }
     }];
+
+    let layout = {
+        margin: {
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 0
+        }
+    }
 
     let config = {responsive: true};
 
-    Plotly.newPlot('treemap', data, config);
+    Plotly.newPlot('treemap', data, layout, config);
 {% endblock %}

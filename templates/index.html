@@ -71,40 +71,48 @@
           </div>
       </div>
   </nav>
+{# Web content code goes here #}
+{% block content %}
+    <div class="row">
+        <div class="col-4">
+            <div class="card border-secondary">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                    <h4 class="card-title">Secondary card title</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                        content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card border-secondary">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                    <h4 class="card-title">Secondary card title</h4>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    let arenaInfo =  {{ arenaInfo|safe }};
+    let arenaMarker = [];
 
-    <!--Main content-->
+    // Create a map object.
+    let myMap = L.map("map", {
+        center: [37.09, -95.71],
+        zoom: 5
+    });
 
-    <div id="map"></div>
-    <!--chart.js-->
-    <!--Bootstrap JS-->
+    for (var i=0; i < arenaInfo.length; i++) {
+        arenaMarker.push(
+            L.marker(arenaInfo[i].location).bindPopup("<h1>"+arenaInfo[i].arenaName+" - Home of the"+arenaInfo[i].teamName+"</h1>").addTo(myMap)
+        );
+    }
 
-    <!--Custom JS that loads through Flask-->
-    <script type="text/javascript">
-      let arenaInfo =  {{ arenaInfo|safe }}; 
-      let arenaMarker = [];
-
-      let myMap = L.map("map", {
-     center: [37.09, -95.71],
-     zoom: 5
-   });
- 
-
-for (var i=0; i < arenaInfo.length; i++) {
-    console.log(arenaMarker)
-    arenaMarker.push(
-  L.marker(arenaInfo[i].location).bindPopup("<h1>"+arenaInfo[i].arenaName+" - Home of the"+arenaInfo[i].teamName+"</h1>").addTo(myMap)
-    );
-};
- 
-  // Create a map object.
-
- 
- 
-   // Add a tile layer.
-   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-   }).addTo(myMap)
-
-    </script>
-</body>
-</html>
+    // Add a tile layer.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(myMap)
+{% endblock %}
