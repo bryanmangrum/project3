@@ -37,10 +37,11 @@ def salaries():
     # Base labels and parents
     labels = ["League", "Western Conference", "Eastern Conference"]
     parents = ["", "League", "League"]
+    #values = []
 
     # Query for distinct divisions and their parent conferences
     results = session.query(Win_Counts.division, Win_Counts.conference)\
-        .distinct()
+        .distinct().order_by(Win_Counts.division.desc())
 
     for row in results:
         # append distinct divisions to labels
@@ -50,7 +51,7 @@ def salaries():
 
     # Query distinct teams
     team_results = session.query(Win_Counts.team, Win_Counts.division)\
-        .distinct()
+        .distinct().order_by(Win_Counts.team.desc())
 
     for row in team_results:
         # append distinct teams to labels
@@ -61,7 +62,7 @@ def salaries():
         player_results = session.query(
             Player_Salaries.player,
             Player_Salaries.team
-        ).filter(Player_Salaries.team == row[0])
+        ).filter(Player_Salaries.team == row[0]).order_by(Player_Salaries.team.desc())
         for player in player_results:
             # append distinct players into labels
             labels.append(player[0])
@@ -82,10 +83,10 @@ def wins():
     # Base labels and parents
     label = ["League", "Western Conference", "Eastern Conference"]
     parent = ["", "League", "League"]
+    value = [""]
 
     # Query for distinct divisions and their parent conferences
-    results = session1.query(Win_Counts.division, Win_Counts.conference)\
-        .distinct()
+    results = session1.query(Win_Counts.division, Win_Counts.conference).distinct().order_by(Win_Counts.division.desc())
 
     for row in results:
         # append distinct divisions to labels
@@ -95,7 +96,7 @@ def wins():
 
     # Query distinct teams
     team_results = session1.query(Win_Counts.team, Win_Counts.division)\
-        .distinct()
+        .distinct().order_by(Win_Counts.team.desc())
 
     for row in team_results:
         # append distinct teams to labels
@@ -103,12 +104,28 @@ def wins():
         # append their parent divisions to parents
         parent.append(row[1])
 
+    win_totals1 = session1.query(func.sum(Win_Counts.win_count), Win_Counts.conference).group_by(Win_Counts.conference).order_by(Win_Counts.conference.desc())
+    
+    for row in win_totals1:
+        value.append(row[0])
+
+    win_totals2 = session1.query(func.sum(Win_Counts.win_count), Win_Counts.division).group_by(Win_Counts.division).order_by(Win_Counts.division.desc())
+    
+    for row in win_totals2:
+        value.append(row[0])
+
+    win_totals3 = session1.query(func.sum(Win_Counts.win_count), Win_Counts.team).group_by(Win_Counts.team).order_by(Win_Counts.team.desc())
+    
+    for row in win_totals3:
+        value.append(row[0])
+
+    #print(value)
 
 
     # Close connection
     session1.close()
 
-    return render_template("wins.html", label=label, parent=parent)
+    return render_template("wins.html", label=label, parent=parent, value=value)
 
 
 if __name__ == "__main__":
