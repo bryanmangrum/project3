@@ -26,7 +26,7 @@ app = Flask(__name__)
 def index():
     session = Session(engine)
     #results = session.query(Team_Attributes.arena).all()
-    arenas_info = []
+    arenaInfo = []
     result = session.query(Arenas.latitude, Arenas.longitude, Arenas.arena, Arenas.team, Arenas.arenaurl ,Arenas.sponsorurl)
     for row in result:
         latlon = []
@@ -39,14 +39,17 @@ def index():
             "arenaURL": row[4],
             "sponsorURL": row[5]
         }
-        arenas_info.append(arena_dict)
+        arenaInfo.append(arena_dict)
 
-    print(arenas_info)
+    
+
+    print(arenaInfo)
+    
 
 
     session.close()
 
-    return render_template("index.html")
+    return render_template("index.html", arenaInfo = arenaInfo)
 
 
 @app.route("/salaries")
