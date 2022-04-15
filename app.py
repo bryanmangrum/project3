@@ -4,10 +4,9 @@ from flask import Flask, render_template
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-import config
 
 # Initial connection to database
-engine = create_engine(f"postgresql://postgres:{config.pw}@localhost:5432/{config.db}")
+engine = create_engine(f"postgresql://postgres:password@localhost:5432/basketball")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 
@@ -40,8 +39,6 @@ def index():
             "sponsorURL": row[5]
         }
         arenaInfo.append(arena_dict)
-
-    print(arenaInfo)
 
     session.close()
 
