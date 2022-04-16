@@ -1,9 +1,12 @@
 from flask import Flask, render_template
 from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, Integer
+import numpy as np
 
 # Initial connection to database
+
 engine = create_engine(f"postgresql://postgres:password@localhost:5432/basketball")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
@@ -186,6 +189,90 @@ def wins():
     session1.close()
 
     return render_template("wins.html", label=label, parent=parent, value=value)
+
+
+@app.route("/ratio")
+def ratio():
+    # Initialize database session
+    session2 = Session(engine)
+
+    #For Team Win_Counts
+    # Base labels and parents
+    label1 = ["League", "Western Conference", "Eastern Conference"]
+    parent1 = ["", "League", "League"]
+    value1 = []
+    value2 = [1089]
+
+    # Query for league salary total (add up all players' salaries)
+    results = session2.query(func.sum(Player_Salaries.salary))
+    value1.append(results[0][0])
+
+    # Query for conference salary total
+    for conference in label1[1:]:
+        conference_total = session2.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.conference)\
+            .having(Win_Counts.conference == conference)
+        for total in conference_total:
+            value1.append(total[0])
+
+    # Query for distinct divisions and their parent conferences
+    results = session2.query(Win_Counts.division, Win_Counts.conference)\
+        .distinct().order_by(Win_Counts.division.desc())
+
+    for row in results:
+        # append distinct divisions to labels
+        label1.append(row[0])
+        # append their parent conferences to parents
+        parent1.append(row[1])
+        # find salary totals for division
+        division_total = session2.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.division)\
+            .having(Win_Counts.division == row[0])
+        value1.append(division_total[0][0])
+
+    # Query distinct teams
+    team_results = session2.query(Win_Counts.team, Win_Counts.division)\
+        .distinct().order_by(Win_Counts.team.desc())
+
+    for row in team_results:
+        # append distinct teams to labels
+        label1.append(row[0])
+        # append their parent divisions to parents
+        parent1.append(row[1])
+        # find salary totals for team
+        team_total = session2.query(func.sum(Player_Salaries.salary))\
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
+            .group_by(Win_Counts.team)\
+            .having(Win_Counts.team == row[0])
+        value1.append(team_total[0][0])
+
+
+
+    win_totals1 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.conference).group_by(Win_Counts.conference).order_by(Win_Counts.conference.desc())
+    
+    for row in win_totals1:
+        value2.append(row[0])
+
+    win_totals2 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.division).group_by(Win_Counts.division).order_by(Win_Counts.division.desc())
+    
+    for row in win_totals2:
+        value2.append(row[0])
+
+    win_totals3 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.team).group_by(Win_Counts.team).order_by(Win_Counts.team.desc())
+    
+    for row in win_totals3:
+        value2.append(row[0])
+
+    value3 = list(np.around(np.true_divide(value1, value2), decimals=0))
+    print(value3)
+
+
+    # Close connection
+    session2.close()
+
+    return render_template("ratio.html", labels=label1, parents=parent1, values=value3)
 
 
 if __name__ == "__main__":
