@@ -42,6 +42,10 @@
                         <a class="nav-link {{ 'active' if active_page == 'wins' }}" href="{{ url_for('wins') }}">Wins</a>
                         {% if active_page == 'wins' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if active_page == 'ratio' }}" href="{{ url_for('ratio') }}">Ratio</a>
+                        {% if active_page == 'ratio' %}<span class="visually-hidden">(current)</span>{% endif %}
+                    </li>
                     <!--Navbar item 4-->
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>

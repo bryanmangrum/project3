@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{# Set active class tag for navigation bar #}
+{% set active_page = 'ratio' %}
+
+{# Set page title #}
+{% block title %}Test1{% endblock %}
+
+{# Web content code goes here #}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div id="treemap"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    let labels = {{ labels|safe }};
+    let parents = {{ parents|safe }};
+    let values = {{ values|safe }};
+
+    var data = [{
+        type: "treemap",
+        <!-- branchvalues: "total", -->
+        labels: labels,
+        parents: parents,
+        values:  values,
+        outsidetextfont: {"size": 20, "color": "#377eb8"},
+        marker: {"line": {"width": 2}},
+        pathbar: {"visible": false}
+    }];
+
+    let config = {responsive: true};
+
+    Plotly.newPlot('treemap', data, config);
+{% endblock %}
