@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func, Integer
+from sqlalchemy import create_engine, func
 import numpy as np
+import random
 
 # Initial connection to database
 
@@ -342,7 +342,6 @@ def ratio():
         value2.append(row[0])
 
     value3 = list(np.around(np.true_divide(value1, value2), decimals=0))
-    print(value3)
 
 
     # Close connection
