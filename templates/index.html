@@ -7,34 +7,74 @@
 {% block title %}NBA Stats{% endblock %}
 
 {# Web content code goes here #}
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin="" />
 
-  <!-- Leaflet JavaScript code -->
-  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
-
+{% block content %}
+    <div class="row h-100">
+        <div class="col-lg-7 px-0">
+            <div id="map" class="h-100"></div>
+        </div>
+        <div class="col-lg-5 px-0">
+            <canvas id="myChart" class="m-3"></canvas>
+        </div>
+    </div>
+{% endblock %}
 {% block script %}
-        var myMap = L.map("map", {
-          center: [45.52, -122.67],
-          zoom: 13
-        });
-        
-        // Adding a tile layer (the background map image) to our map:
-        // We use the addTo() method to add objects to our map.
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(myMap);
-        
-        // Creating a new marker:
-        // We pass in some initial options, and then add the marker to the map by using the addTo() method.
-        var marker = L.marker([45.52, -122.67], {
-          draggable: true,
-          title: "My First Marker"
-        }).addTo(myMap);
-  
-  
-  {% endblock %}
+    let arenaInfo =  {{ arenaInfo|safe }};
+    let arenaMarker = [];
+
+    // Create a map object.
+    let myMap = L.map("map", {
+        center: [37.09, -95.71],
+        zoom: 4
+    });
+
+    for (var i=0; i < arenaInfo.length; i++) {
+        arenaMarker.push(
+            L.marker(arenaInfo[i].location).bindPopup("<h1 style='font-family: Nunito Sans, sans-serif'>"+arenaInfo[i].arenaName+"</h1>").addTo(myMap)
+        );
+    }
+
+    // Add a tile layer.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(myMap);
+
+    // For Chart.js
+    Chart.defaults.font.family = 'Nunito Sans';
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            maintainAspectRatio: false
+        }
+    });
+{% endblock %}

@@ -7,7 +7,7 @@ config.py
 __pycache__/
 
 # Pip Virtual Environment
-venv/
+env/
 
 # .DS_Store
 .DS_Store

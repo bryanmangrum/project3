@@ -4,7 +4,7 @@
 {% set active_page = 'wins' %}
 
 {# Set page title #}
-{% block title %}Test1{% endblock %}
+{% block title %}Wins{% endblock %}
 
 {# Web content code goes here #}
 {% block content %}
@@ -19,18 +19,27 @@
     let parent = {{ parent|safe }};
     let value = {{ value|safe }};
 
-    var data = [{
+    let data = [{
         type: "treemap",
         branchvalues: "total",
         labels: label,
         parents: parent,
-        values:  value,
-        outsidetextfont: {"size": 20, "color": "#377eb8"},
-        marker: {"line": {"width": 2}},
-        pathbar: {"visible": false}
+        values:  value
     }];
+
+    let layout = {
+        margin: {
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 0
+        },
+        font: {
+            family: "Nunito Sans"
+        }
+    };
 
     let config = {responsive: true};
 
-    Plotly.newPlot('treemap', data, config);
+    Plotly.newPlot('treemap', data, layout, config);
 {% endblock %}

@@ -151,6 +151,20 @@ CREATE TABLE arenas(
     longitude REAL NOT NULL,
     arena VARCHAR(255) NOT NULL,
     team VARCHAR (255) NOT NULL,
+    sponsor VARCHAR (255) NOT NULL,
     sector VARCHAR(255) NOT NULL,
-    subSector VARCHAR(255)
+    subsector VARCHAR(255),
+    arenaurl VARCHAR(255) NOT NULL,
+    sponsorurl VARCHAR(255) NOT NULL,
+    imgurl VARCHAR(255) NOT NULL
+);
+
+-- Create Table for NBA colors
+CREATE TABLE colors(
+    team VARCHAR(255) PRIMARY KEY NOT NULL,
+    color1 VARCHAR(6),
+    color2 VARCHAR(6),
+    color3 VARCHAR(6),
+    color4 VARCHAR(6),
+    color5 VARCHAR(6)
 );

@@ -4,13 +4,22 @@
 {% set active_page = 'salaries' %}
 
 {# Set page title #}
-{% block title %}Test{% endblock %}
+{% block title %}Salaries{% endblock %}
 
 {# Web content code goes here #}
 {% block content %}
-    <div class="row">
-        <div class="col-12">
-            <div id="treemap"></div>
+    <div class="row h-100">
+        <div class="col-lg-7 px-0 my-lg-auto">
+            <div id="treemap" class="mx-2 mx-sm-0 my-2 my-lg-0"></div>
+        </div>
+        <div class="col-lg-5 px-0 pe-lg-5 my-lg-auto">
+            <div class="card">
+                <h5 class="card-header card-title">test</h5>
+                <div class="card-body card-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad atque, blanditiis cum dolorem doloremque ea incidunt iure numquam odio odit provident quae quod rem, repellat repellendus repudiandae, sunt tempore vel.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque est molestias mollitia placeat tenetur, voluptate. Amet in ipsa quam? Adipisci aliquam aspernatur ducimus ea excepturi expedita recusandae vero voluptatem.</p>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -20,14 +29,38 @@
     let values = {{ values|safe }};
 
     let data = [{
-        type: "treemap",
+        type: "sunburst",
         labels: labels,
         parents: parents,
         values: values,
-        branchvalues: "total"
+        branchvalues: "total",
+        maxdepth: 4,
+        marker: {
+            colors: []
+        },
+        rotation: 270
     }];
+
+    let layout = {
+        margin: {
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 34
+        },
+        font: {
+            family: "Nunito Sans"
+        },
+        title: {
+            text: "Salaries in the NBA",
+            font: {
+                size: 24,
+                color: "#55595c"
+            }
+        }
+    };
 
     let config = {responsive: true};
 
-    Plotly.newPlot('treemap', data, config);
+    Plotly.newPlot('treemap', data, layout, config);
 {% endblock %}
