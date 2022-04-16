@@ -67,6 +67,7 @@ def sector():
         labels.append(label)
         data1.append(occurCount)
     rgb_list = []
+    random.seed(23)
     for x in range(len(labels)):
         a = str(random.randint(0,255))
         b = str(random.randint(0,255))
@@ -74,6 +75,7 @@ def sector():
         
         valconcat = f'rgb({a}, {b}, {c})'
         rgb_list.append(valconcat)
+    print(rgb_list)
 
     
     
