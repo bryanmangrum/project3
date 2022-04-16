@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {# Set active class tag for navigation bar #}
-{% set active_page = 'wins' %}
+{% set active_page = 'ratio' %}
 
 {# Set page title #}
-{% block title %}Wins{% endblock %}
+{% block title %}Test1{% endblock %}
 
 {# Web content code goes here #}
 {% block content %}
@@ -15,18 +15,20 @@
     </div>
 {% endblock %}
 {% block script %}
-    let label = {{ label|safe }};
-    let parent = {{ parent|safe }};
-    let value = {{ value|safe }};
+    let labels = {{ labels|safe }};
+    let parents = {{ parents|safe }};
+    let values = {{ values|safe }};
     let color = {{ colors|safe }};
 
-    let data = [{
+    var data = [{
         type: "treemap",
-        branchvalues: "total",
-        labels: label,
-        parents: parent,
-        values:  value,
-        marker: {colors: color}
+        <!-- branchvalues: "total", -->
+        labels: labels,
+        parents: parents,
+        values:  values,
+        outsidetextfont: {"size": 20, "color": "#377eb8"},
+        marker: {colors: color},
+        pathbar: {"visible": false}
     }];
 
     let layout = {
