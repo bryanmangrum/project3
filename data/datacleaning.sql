@@ -168,3 +168,8 @@ CREATE TABLE colors(
     color4 VARCHAR(6),
     color5 VARCHAR(6)
 );
+
+-- Adjust colors table to match rest of our database
+UPDATE colors
+SET team = 'LA Clippers'
+WHERE team = 'Los Angeles Clippers';

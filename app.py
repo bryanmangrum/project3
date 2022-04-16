@@ -14,6 +14,7 @@ Win_Counts = Base.classes.win_counts
 Team_Attributes = Base.classes.team_attributes
 Draft = Base.classes.draft
 Arenas = Base.classes.arenas
+Colors = Base.classes.colors
 
 # Initialize app
 app = Flask(__name__)
@@ -51,6 +52,17 @@ def salaries():
     labels = ["League", "Western Conference", "Eastern Conference"]
     parents = ["", "League", "League"]
     values = []
+    colors = [
+        "#FFFFFF",
+        "#FF165D",
+        "#1E56A0",
+        "#350B40",
+        "#004445",
+        "#283C63",
+        "#9D0191",
+        "#C70039",
+        "#126E82"
+    ]
 
     # Query for league salary total (add up all players' salaries)
     results = session.query(func.sum(Player_Salaries.salary))
@@ -90,6 +102,8 @@ def salaries():
         labels.append(row[0])
         # append their parent divisions to parents
         parents.append(row[1])
+        team_color = session.query(Colors.color1).filter(Colors.team == row[0])
+        colors.append(f"#{team_color[0][0]}")
         # find salary totals for team
         team_total = session.query(func.sum(Player_Salaries.salary))\
             .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
@@ -109,6 +123,8 @@ def salaries():
             parents.append(player[1])
             # append salary into values
             values.append(player[2])
+            # append blank string for player color to keep arrays aligned
+            colors.append("")
 
     # Close connection
     session.close()
@@ -117,7 +133,8 @@ def salaries():
         "salaries.html",
         labels=labels,
         parents=parents,
-        values=values
+        values=values,
+        colors=colors
     )
 
 

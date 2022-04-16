@@ -27,6 +27,7 @@
     let labels = {{ labels|safe }};
     let parents = {{ parents|safe }};
     let values = {{ values|safe }};
+    let colors = {{ colors|safe }};
 
     let data = [{
         type: "sunburst",
@@ -36,9 +37,10 @@
         branchvalues: "total",
         maxdepth: 4,
         marker: {
-            colors: []
+            colors: colors
         },
-        rotation: 270
+        rotation: 270,
+        hovertext: values.map(x => Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(x))
     }];
 
     let layout = {
@@ -52,7 +54,7 @@
             family: "Nunito Sans"
         },
         title: {
-            text: "Salaries in the NBA",
+            text: "Salaries in the NBA (2020-21)",
             font: {
                 size: 24,
                 color: "#55595c"
