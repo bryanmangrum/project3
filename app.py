@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+import random
 import config
   
 
@@ -25,9 +26,9 @@ app = Flask(__name__)
 def index():
     session = Session(engine)
     arenaInfo = []
-    result = session.query(Arenas.latitude, Arenas.longitude, Arenas.arena,
+    results = session.query(Arenas.latitude, Arenas.longitude, Arenas.arena,
                            Arenas.team,Arenas.sponsor, Arenas.arenaurl, Arenas.sponsorurl, Arenas.imgurl)
-    for row in result:
+    for row in results:
         latlon = []
         latlon.append(row[0])
         latlon.append(row[1])
@@ -46,6 +47,52 @@ def index():
 
     return render_template("index.html", arenaInfo=arenaInfo)
 
+######
+@app.route("/sector")
+def sector():
+    session = Session(engine)
+    label1 = []
+    labels = []
+    sectors_all = []
+    data1 = []
+    results = session.query(Arenas.sector)
+
+    for result in results:
+        sectors_all.append(result[0])
+        if result[0] not in label1:
+            label1.append(result[0])
+
+    for label in label1:
+        occurCount = sectors_all.count(label)
+        labels.append(label)
+        data1.append(occurCount)
+    rgb_list = []
+    for x in range(len(labels)):
+        a = str(random.randint(0,255))
+        b = str(random.randint(0,255))
+        c = str(random.randint(0,255))
+        
+        valconcat = f'rgb({a}, {b}, {c})'
+        rgb_list.append(valconcat)
+
+    
+    
+    
+    
+    datasets = []
+    data_dict = {
+        'label': "Sponsors' Business Sector",
+        'data': data1,
+        'backgroundColor': rgb_list
+    }
+    datasets.append(data_dict)    
+    session.close()
+
+
+
+    return render_template("sector.html",labels=labels,datasets=datasets )
+
+#######
 @app.route("/salaries")
 def salaries():
     # Initialize database session
