@@ -4,60 +4,91 @@
 {% set active_page = 'index' %}
 
 {# Set page title #}
-{% block title %}NBA Stats{% endblock %}
+{% block title %}Money in the NBA{% endblock %}
 
 {# Web content code goes here #}
 
 {% block content %}
     <div class="row h-100">
-        <div class="col-lg-12 px-0">
+        <div id="map-col" class="col-lg-7 px-0">
             <div id="map" class="h-100"></div>
         </div>
-        <!-- <div class="col-lg-5 px-0">
-            <canvas id="myChart" class="m-3"></canvas>
-        </div> -->
+        <div class="col-lg-5 px-0 my-lg-auto">
+            <div class="card border-0 m-2">
+                <h4 class="card-header text-center bg-white card-title">What types of companies sponsor NBA arenas as of the 2020-21 season?</h4>
+                <div class="card-body card-text">
+                    <p>With the rise of non-traditional businesses, we decided to see which kinds of businesses sponsored NBA arenas during the 2020-21 season. Interestingly, we see that the technology sector is nearly tied with the financial sector, which may mirror current market compositions.</p>
+                    <p>Click on the map to view each team's arena information. Click on the legend in the polar area chart to manipulate which slices appear on the chart.</p>
+                    <p>Arena information and team logos were manually compiled and saved from various online sources.</p>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
+
+{# Custom Javascript for this page #}
 {% block script %}
-    let arenaInfo =  {{ arenaInfo|safe }};
-    let arenaMarker = [];
+    window.addEventListener("load", function() {
+        let arenaInfo =  {{ arenaInfo|safe }};
+        let arenaMarker = [];
 
-    // Create a map object.
-    let myMap = L.map("map", {
-        center: [37.09, -95.71],
-        zoom: 4
-    });
+        // Create a map object.
+        let myMap = L.map("map", {
+            center: [37.09, -96.86],
+            zoom: 4
+        });
 
-    for (var i=0; i < arenaInfo.length; i++) {
-        let iconurl = arenaInfo[i].logoURL;
+        for (var i=0; i < arenaInfo.length; i++) {
+            let iconurl = arenaInfo[i].logoURL;
 
-        let teamIcon; 
+            let teamIcon;
 
-        if (arenaInfo[i].teamName == 'Los Angeles Lakers') {
+            if (arenaInfo[i].teamName == 'Los Angeles Lakers') {
+                teamIcon = L.icon({
+                    iconUrl: iconurl,
+                    iconSize: [40,40],
+                    iconAnchor: [10,0]
+                });
+        } else {
             teamIcon = L.icon({
                 iconUrl: iconurl,
-                iconSize: [40,40],
-                iconAnchor: [10,0]
+                iconSize: [40,40]
             });
-            
+        }
+            arenaMarker.push(
+        L.marker(arenaInfo[i].location, {icon: teamIcon, alt:arenaInfo[i].teamName}).bindPopup("<div><h2 style='font-family: Nunito Sans, sans-serif'><a href='"+arenaInfo[i].arenaURL+"'>"+arenaInfo[i].arenaName+"</a></h2><hr><h5>Home of the "+ arenaInfo[i].teamName +"!</h5><p style='font-family: Nunito Sans, sans-serif; font-size: 18.5px;'>Sponsored by <a href='"+arenaInfo[i].sponsorURL+"'>"+arenaInfo[i].sponsorName+"</a></p><p style='font-family: Nunito Sans, sans-serif; font-size: 18.5px;'>Business Sector: "+arenaInfo[i].sector+"</p>"+"</div>").addTo(myMap)
+            );
+        }
 
-    } else {
-        teamIcon = L.icon({
-            iconUrl: iconurl,
-            iconSize: [40,40]
-        });
-        
-    }
+        // Add a tile layer.
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(myMap);
+    })
 
-    
-        arenaMarker.push(
-            L.marker(arenaInfo[i].location, {icon: teamIcon, alt:arenaInfo[i].teamName}).bindPopup("<div><h2 style='font-family: Nunito Sans, sans-serif'><a href='"+arenaInfo[i].arenaURL+"'>"+arenaInfo[i].arenaName+"</a></h2><hr><h5>Home of the "+ arenaInfo[i].teamName +"!</h5> <p style='font-family: Nunito Sans, sans-serif; font-size: 18.5px;'>Sponsored by <a href='"+arenaInfo[i].sponsorURL+"'>"+arenaInfo[i].sponsorName+"</a></p>"+"</div>").addTo(myMap)
-        );
-    }
+    // chart.js polar area chart
+    Chart.defaults.font.family = 'Nunito Sans';
+    let labels = {{ labels|safe }};
+    let datasets = {{ datasets|safe }}
 
-    // Add a tile layer.
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(myMap);
-    
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Number of Arena Sponsors per Business Sector",
+                    font: {
+                        size: 20
+                    }
+                }
+            }
+        }
+    });
 {% endblock %}

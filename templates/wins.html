@@ -9,11 +9,29 @@
 {# Web content code goes here #}
 {% block content %}
     <div class="row">
+        <div class="col-xl-7">
+            <canvas id="ratios" class="m-2"></canvas>
+        </div>
+        <div class="col-xl-5">
+            <div id="treemap" class="m-2 mt-3"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12">
-            <div id="treemap"></div>
+            <div class="card border-0">
+                <h4 class="card-header text-center bg-white card-title">How expensive are each team's wins?</h4>
+                <div class="card-body card-text">
+                    <p>Highly paid players do not always translate into more frequent wins. To track this, we found the ratio of the amount of salary paid in total to a team's roster against the number of wins the team had. This way, we are able to track just how expensive each each win was for a team.</p>
+                    <p>In doing so, we see right away that the Houston Rockets spent over $7 million for each win. Once we observe just how few wins the Rockets had over the season (17), we could conclude that the amount of money they were paying to their players may not have been justifiable.</p>
+                    <p>On the treemap, click on the desired level of granularity to view comparative total win counts. Hover over the bar chart to view the amount a team paid to its players for each win.</p>
+                    <p>Player salary values were obtained from scraping the table data hosted on the <a href="http://www.espn.com/nba/salaries/_/year/2021/seasontype/5">ESPN Player Salaries</a> pages. Team win counts were calculated in PostgreSQL and exported into a new table using data collected by <a href="https://www.kaggle.com/datasets/wyattowalsh/basketball">Wyatt Walsh on Kaggle</a> which was obtained by querying the NBA API on a daily basis.</p>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
+
+{# Custom Javascript for this page #}
 {% block script %}
     let label = {{ label|safe }};
     let parent = {{ parent|safe }};
@@ -22,6 +40,8 @@
 
     let data = [{
         type: "treemap",
+        hoverinfo: "label+text",
+        text: value.map(x => `${x} Wins`),
         branchvalues: "total",
         labels: label,
         parents: parent,
@@ -34,14 +54,63 @@
             l: 0,
             r: 0,
             b: 0,
-            t: 0
+            t: 33
         },
         font: {
             family: "Nunito Sans"
+        },
+        title: {
+            text: "Total Wins (2020-21)",
+            font: {
+                size: 22,
+                color: "#55595c"
+            }
         }
     };
 
     let config = {responsive: true};
 
     Plotly.newPlot('treemap', data, layout, config);
+
+    let ratioValues = {{ ratio_values|safe }};
+
+    Chart.defaults.font.family = 'Nunito Sans';
+    const ctx = document.getElementById('ratios').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: label.slice(9),
+            datasets: [
+                {
+                    label: '$ spent per win',
+                    data: ratioValues,
+                    backgroundColor: color.slice(9),
+                    borderColor: color.slice(9),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        callback: (value, index, values) => {
+                            return Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 0}).format(value)
+                        }
+                    },
+                    beginAtZero: true
+                }
+            },
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Ratio of Salary Paid per Win by Team (2020-21)",
+                    font: {
+                        size: 20
+                    }
+                }
+            }
+        }
+    });
 {% endblock %}

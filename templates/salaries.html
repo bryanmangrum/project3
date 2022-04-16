@@ -10,19 +10,22 @@
 {% block content %}
     <div class="row h-100">
         <div class="col-lg-7 px-0 my-lg-auto">
-            <div id="treemap" class="mx-2 mx-sm-0 my-2 my-lg-0"></div>
+            <div id="sunburst" class="mx-2 mx-sm-0 my-2 my-lg-0"></div>
         </div>
         <div class="col-lg-5 px-0 pe-lg-5 my-lg-auto">
-            <div class="card">
-                <h5 class="card-header card-title">test</h5>
+            <div class="card border-0">
+                <h4 class="card-header text-center bg-white card-title">Who is paying the most for their players?</h4>
                 <div class="card-body card-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad atque, blanditiis cum dolorem doloremque ea incidunt iure numquam odio odit provident quae quod rem, repellat repellendus repudiandae, sunt tempore vel.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque est molestias mollitia placeat tenetur, voluptate. Amet in ipsa quam? Adipisci aliquam aspernatur ducimus ea excepturi expedita recusandae vero voluptatem.</p>
+                    <p>We wanted to take a look at the total value of salaries paid out to players for the 2020-21 NBA season. In this sunburst chart, we can visualize the hierarchical salary totals from as high-level as the entire league all the way down to the individual player on each team. Overall, there does not seem to be too big of a difference when it comes to the amount spent on player salaries on the conference and division levels.</p>
+                    <p> Click on the desired level of granularity and hover over the slice to view the salary total.</p>
+                    <p>Player salary values were obtained from scraping the table data hosted on the <a href="http://www.espn.com/nba/salaries/_/year/2021/seasontype/5">ESPN Player Salaries</a> pages.</p>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
+
+{# Custom Javascript for this page #}
 {% block script %}
     let labels = {{ labels|safe }};
     let parents = {{ parents|safe }};
@@ -40,7 +43,8 @@
             colors: colors
         },
         rotation: 270,
-        hovertext: values.map(x => Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(x))
+        hoverinfo: "label+text",
+        hovertext: values.map(x => Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 0}).format(x))
     }];
 
     let layout = {
@@ -48,7 +52,7 @@
             l: 0,
             r: 0,
             b: 0,
-            t: 34
+            t: 32
         },
         font: {
             family: "Nunito Sans"
@@ -56,7 +60,7 @@
         title: {
             text: "Salaries in the NBA (2020-21)",
             font: {
-                size: 24,
+                size: 22,
                 color: "#55595c"
             }
         }
@@ -64,5 +68,5 @@
 
     let config = {responsive: true};
 
-    Plotly.newPlot('treemap', data, layout, config);
+    Plotly.newPlot('sunburst', data, layout, config);
 {% endblock %}

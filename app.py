@@ -7,7 +7,7 @@ import random
 
 # Initial connection to database
 
-engine = create_engine(f"postgresql://postgres:postgres@localhost:5432/postgres")
+engine = create_engine(f"postgresql://postgres:password@localhost:5432/basketball")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 
@@ -28,7 +28,7 @@ def index():
     session = Session(engine)
     arenaInfo = []
     results = session.query(Arenas.latitude, Arenas.longitude, Arenas.arena,
-                           Arenas.team,Arenas.sponsor, Arenas.arenaurl, Arenas.sponsorurl, Arenas.imgurl)
+                           Arenas.team,Arenas.sponsor, Arenas.arenaurl, Arenas.sponsorurl, Arenas.imgurl, Arenas.sector)
     for row in results:
         latlon = []
         latlon.append(row[0])
@@ -40,18 +40,12 @@ def index():
             "sponsorName": row[4],
             "arenaURL": row[5],
             "sponsorURL": row[6],            
-            "logoURL": row[7]
+            "logoURL": row[7],
+            "sector": row[8]
         }
         arenaInfo.append(arena_dict)
 
-    session.close()
-
-    return render_template("index.html", arenaInfo=arenaInfo)
-
-######
-@app.route("/sector")
-def sector():
-    session = Session(engine)
+    # For business sector chart
     label1 = []
     labels = []
     sectors_all = []
@@ -67,35 +61,39 @@ def sector():
         occurCount = sectors_all.count(label)
         labels.append(label)
         data1.append(occurCount)
-    rgb_list = []
-    random.seed(23)
-    for x in range(len(labels)):
-        a = str(random.randint(0,255))
-        b = str(random.randint(0,255))
-        c = str(random.randint(0,255))
-        
-        valconcat = f'rgb({a}, {b}, {c})'
-        rgb_list.append(valconcat)
-    print(rgb_list)
 
-    
-    
-    
-    
+    rgb_list = [
+        "#FFC312",
+        "#C4E538",
+        "#12CBC4",
+        "#FDA7DF",
+        "#ED4C67",
+        "#0652DD",
+        "#009432",
+        "#1B1464",
+        "#7bed9f",
+        "#a4b0be"
+    ]
+
     datasets = []
     data_dict = {
         'label': "Sponsors' Business Sector",
         'data': data1,
         'backgroundColor': rgb_list
     }
-    datasets.append(data_dict)    
+
+    datasets.append(data_dict)
+
     session.close()
 
+    return render_template(
+        "index.html",
+        arenaInfo=arenaInfo,
+        labels=labels,
+        datasets=datasets
+    )
 
 
-    return render_template("sector.html",labels=labels,datasets=datasets )
-
-#######
 @app.route("/salaries")
 def salaries():
     # Initialize database session
@@ -261,21 +259,15 @@ def wins():
     # Close connection
     session1.close()
 
-    return render_template("wins.html", label=label, parent=parent, value=value, colors=colors)
-
-
-@app.route("/ratio")
-def ratio():
     # Initialize database session
     session2 = Session(engine)
 
-    #For Team Win_Counts
+    # For Team Win_Counts
     # Base labels and parents
     label1 = ["League", "Eastern Conference", "Western Conference"]
     parent1 = ["", "League", "League"]
     value1 = []
     value2 = [1089]
-    colors = ["#FFFFFF","#1E56A0", "#FF165D", "#9D0191", "#C70039", "#350B40", "#283C63", "#004445", "#126E82"]
 
     # Query for league salary total (add up all players' salaries)
     results = session2.query(func.sum(Player_Salaries.salary))
@@ -283,15 +275,15 @@ def ratio():
 
     # Query for conference salary total
     for conference in label1[1:]:
-        conference_total = session2.query(func.sum(Player_Salaries.salary))\
-            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
-            .group_by(Win_Counts.conference)\
+        conference_total = session2.query(func.sum(Player_Salaries.salary)) \
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team) \
+            .group_by(Win_Counts.conference) \
             .having(Win_Counts.conference == conference)
         for total in conference_total:
             value1.append(total[0])
 
     # Query for distinct divisions and their parent conferences
-    results = session2.query(Win_Counts.division, Win_Counts.conference)\
+    results = session2.query(Win_Counts.division, Win_Counts.conference) \
         .distinct().order_by(Win_Counts.division)
 
     for row in results:
@@ -300,14 +292,14 @@ def ratio():
         # append their parent conferences to parents
         parent1.append(row[1])
         # find salary totals for division
-        division_total = session2.query(func.sum(Player_Salaries.salary))\
-            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
-            .group_by(Win_Counts.division)\
+        division_total = session2.query(func.sum(Player_Salaries.salary)) \
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team) \
+            .group_by(Win_Counts.division) \
             .having(Win_Counts.division == row[0])
         value1.append(division_total[0][0])
 
     # Query distinct teams
-    team_results = session2.query(Win_Counts.team, Win_Counts.division)\
+    team_results = session2.query(Win_Counts.team, Win_Counts.division) \
         .distinct().order_by(Win_Counts.team)
 
     for row in team_results:
@@ -316,38 +308,51 @@ def ratio():
         # append their parent divisions to parents
         parent1.append(row[1])
         # find salary totals for team
-        team_total = session2.query(func.sum(Player_Salaries.salary))\
-            .join(Win_Counts, Player_Salaries.team == Win_Counts.team)\
-            .group_by(Win_Counts.team)\
+        team_total = session2.query(func.sum(Player_Salaries.salary)) \
+            .join(Win_Counts, Player_Salaries.team == Win_Counts.team) \
+            .group_by(Win_Counts.team) \
             .having(Win_Counts.team == row[0])
         value1.append(team_total[0][0])
 
-    team_colors = session2.query(Colors.color1, Colors.team).distinct().order_by(Colors.team)
-    for color in team_colors:
-        colors.append(f"#{color[0]}")
+    win_totals1 = session2.query(func.sum(Win_Counts.win_count),
+                                 Win_Counts.conference).group_by(
+        Win_Counts.conference).order_by(Win_Counts.conference)
 
-    win_totals1 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.conference).group_by(Win_Counts.conference).order_by(Win_Counts.conference)
-    
     for row in win_totals1:
         value2.append(row[0])
 
-    win_totals2 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.division).group_by(Win_Counts.division).order_by(Win_Counts.division)
-    
+    win_totals2 = session2.query(func.sum(Win_Counts.win_count),
+                                 Win_Counts.division).group_by(
+        Win_Counts.division).order_by(Win_Counts.division)
+
     for row in win_totals2:
         value2.append(row[0])
 
-    win_totals3 = session2.query(func.sum(Win_Counts.win_count), Win_Counts.team).group_by(Win_Counts.team).order_by(Win_Counts.team)
-    
+    win_totals3 = session2.query(func.sum(Win_Counts.win_count),
+                                 Win_Counts.team).group_by(
+        Win_Counts.team).order_by(Win_Counts.team)
+
     for row in win_totals3:
         value2.append(row[0])
 
     value3 = list(np.around(np.true_divide(value1, value2), decimals=0))
 
-
     # Close connection
     session2.close()
 
-    return render_template("ratio.html", labels=label1, parents=parent1, values=value3, colors=colors)
+    return render_template(
+        "wins.html",
+        label=label,
+        parent=parent,
+        value=value,
+        colors=colors,
+        ratio_values=value3[9:]
+    )
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
 if __name__ == "__main__":

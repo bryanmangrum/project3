@@ -2,19 +2,25 @@
     --navbar-height: '';
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
 @media (min-width: 992px) {
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
     #content {
         height: calc(100% - (var(--navbar-height)));
     }
 }
 
+@media (max-width: 1199px) {
+    #ratios {
+        height: 260px;
+    }
+}
+
 @media (max-width: 991px) {
-    #content {
-        height: calc(100% - (var(--navbar-height)));
+    #map-col {
+        height: 350px;
     }
 }

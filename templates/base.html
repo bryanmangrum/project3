@@ -18,12 +18,12 @@
 </head>
 <body>
     <!--Navbar-->
-    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <!--Navbar Brand-->
             <a class="navbar-brand" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='img/basketball-32.png') }}" alt="Basketball Brand">
-                <span class="align-middle">NBA Stats</span>
+                <span class="align-middle">Money in the NBA</span>
             </a>
             <!--Menu toggler when window size is small-->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
@@ -49,26 +49,10 @@
                         <a class="nav-link {{ 'active' if active_page == 'wins' }}" href="{{ url_for('wins') }}">Wins</a>
                         {% if active_page == 'wins' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
+                    <!--About-->
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if active_page == 'ratio' }}" href="{{ url_for('ratio') }}">Ratio</a>
-                        {% if active_page == 'ratio' %}<span class="visually-hidden">(current)</span>{% endif %}
-                    </li>
-                    <!--Navbar item 4-->
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if active_page == 'sector' }}" href="{{ url_for('sector') }}">Sponsors' Business Sector</a>
-                        {% if active_page == 'sector' %}<span class="visually-hidden">(current)</span>{% endif %}
-                    </li>
-                    <!--Navbar item 5/Dropdown example-->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                           aria-haspopup="true" aria-expanded="false">Menu</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ url_for('salaries') }}">Salaries</a>
-                            <a class="dropdown-item" href="{{ url_for('wins') }}">Wins</a>
-                            <a class="dropdown-item" href="{{ url_for('sector') }}">Sponsors' Business Sector</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url_for('index') }}">Home</a>
-                        </div>
+                        <a class="nav-link {{ 'active' if active_page == 'about' }}" href="{{ url_for('about') }}">About</a>
+                        {% if active_page == 'about' %}<span class="visually-hidden">(current)</span>{% endif %}
                     </li>
                 </ul>
             </div>
