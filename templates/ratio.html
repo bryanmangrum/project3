@@ -18,6 +18,7 @@
     let labels = {{ labels|safe }};
     let parents = {{ parents|safe }};
     let values = {{ values|safe }};
+    let color = {{ colors|safe }};
 
     var data = [{
         type: "treemap",
@@ -26,11 +27,23 @@
         parents: parents,
         values:  values,
         outsidetextfont: {"size": 20, "color": "#377eb8"},
-        marker: {"line": {"width": 2}},
+        marker: {colors: color},
         pathbar: {"visible": false}
     }];
 
+    let layout = {
+        margin: {
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 0
+        },
+        font: {
+            family: "Nunito Sans"
+        }
+    };
+
     let config = {responsive: true};
 
-    Plotly.newPlot('treemap', data, config);
+    Plotly.newPlot('treemap', data, layout, config);
 {% endblock %}

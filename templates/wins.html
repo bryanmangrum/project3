@@ -18,13 +18,15 @@
     let label = {{ label|safe }};
     let parent = {{ parent|safe }};
     let value = {{ value|safe }};
+    let color = {{ colors|safe }};
 
     let data = [{
         type: "treemap",
         branchvalues: "total",
         labels: label,
         parents: parent,
-        values:  value
+        values:  value,
+        marker: {colors: color}
     }];
 
     let layout = {
