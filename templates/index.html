@@ -30,6 +30,30 @@
 {# Custom Javascript for this page #}
 {% block script %}
     window.addEventListener("load", function() {
+        // chart.js polar area chart
+        Chart.defaults.font.family = 'Nunito Sans';
+        let labels = {{ labels|safe }};
+        let datasets = {{ datasets|safe }}
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Number of Arena Sponsors per Business Sector",
+                        font: {
+                            size: 20
+                        }
+                    }
+                }
+            }
+        });
         let arenaInfo =  {{ arenaInfo|safe }};
         let arenaMarker = [];
 
@@ -65,30 +89,5 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(myMap);
-
-        // chart.js polar area chart
-        Chart.defaults.font.family = 'Nunito Sans';
-        let labels = {{ labels|safe }};
-        let datasets = {{ datasets|safe }}
-
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'polarArea',
-            data: {
-                labels: labels,
-                datasets: datasets
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: "Number of Arena Sponsors per Business Sector",
-                        font: {
-                            size: 20
-                        }
-                    }
-                }
-            }
-        });
     })
 {% endblock %}
