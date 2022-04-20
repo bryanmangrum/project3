@@ -1,5 +1,7 @@
 # The Relationship Between Player Salaries and Team Wins for the 2020-2021 NBA Season
 
+[View the web app here!](https://money-in-the-nba.herokuapp.com/)
+
 This project started with the idea that we wanted to see if team investments into their rosters translated to wins on the court. This is with the understanding that money spent is not the only factor that goes into a team's success or failure. We looked at NBA teams for the 2020-2021 season and analyzed their wins, the money spent on player salaries, and [the relationship between those two](https://money-in-the-nba.herokuapp.com).
 
 We first wanted to incorporate Leaflet and a map into our product, so we thought to include the [location of each team's home arena](https://docs.google.com/presentation/d/1mqYkSCEXJvSyd6BqcCEc-TgwN9aE_Kg7fApw-117O7s/edit#slide=id.g1248e664244_1_21). We leveraged GoogleMaps for the location data of each arena, and then linked the markers to a .png with each team's logo to replace the standard marker.
